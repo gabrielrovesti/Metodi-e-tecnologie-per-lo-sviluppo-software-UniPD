@@ -1,0 +1,178 @@
+----Prerequisiti----
+Configurazioni base di Git (user/email)
+git config --global user.name "John Doe"
+git config --global user.email johndoe@example.com
+
+Per pushare le cartelle si richiede la creazione di un token (generare token dalle settings di GitHub e poi usare:
+https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token
+
+Creazione di una chiave SSH per lavorare da remoto:
+https://docs.github.com/en/authentication/connecting-to-github-with-ssh
+Per Windows:
+Entrare da Git GUI, cliccare "Help", cliccare "Generate SSH Key" ed aggiungerla nelle settings
+di GitHub nella sezione SSH Keys. Questo permette di fare "git add remote origin"
+Se si sbagliasse a inserire la git remote: git remote remove origin
+
+----Dubbi logici e domande frequenti----
+-Il riferimento che il prof intende è di fare echo aggiungengo come riga dove si trova il file X (ad es. inventario)
+ L'idea è quella di avere una sorta di index tipo sito web. Il contenuto dei file comunque non è rilevante.
+-In un punto richiede il commit di una cartella vuota, che non sarebbe possibile.
+ Occorre creare un nuovo file (comando touch per crearne uno vuoto)
+-Non è un problema se i file vuoti vengono riempiti con le matricole.
+-Se non chiudesse le issues da comando, chiuderle manualmente su GitHub. Non è un problema.
+-Si consideri che si lavora principalmente su develop, che infatti è qualche
+commit avanti al branch main/master. Infatti il resto dei comandi lo riflette.
+
+----Assignment vero e proprio----
+
+[Sviluppatore 1 - Luca]
+(Si crei una cartella generica in una posizione X e si faccia tutto da lì)
+
+git flow init
+git remote add origin https://github.com/LucaRomio/First-assignment.git	
+
+(A questo punto si va su GitHub.com, andando a crearsi un New Project.
+Fatto questo, si aggiunga l'altro sviluppatore su Settings, Collaborators.
+Infatti si lavora entrambi su una repo unica.
+Successivamente si creano le Issues nell'ordine specificato,
+eventualmente assegnandole ad un Assignee, poi si creano le Milestone (prima/seconda versione)
+e successivamente si inseriscono nella colonna To Do della Project Board).
+
+git flow feature start firstfeature
+echo "2009088" >> inventario.md
+echo "2014028" >> inventario.md
+git add inventario.md
+git commit -m "close #1" -m "Aggiunto file inventario" 
+git flow feature publish firstfeature							
+git flow feature finish -k firstfeature	
+git push origin develop
+git push -f origin main
+
+git flow feature start secondfeature
+echo "2009088" >> processori.md
+echo "2014028" >> processori.md
+echo "- processori.md" >>inventario.md
+git add processori.md
+git add inventario.md
+git commit -m "close #2" -m "Aggiunto file processori" -m "Modificato file inventario"
+git flow feature publish secondfeature
+git flow feature finish -k secondfeature
+git push origin develop
+
+(Chiudere le prime 2 issues su GitHub)
+
+Se Git non permette il recupero delle modifiche eseguire:
+git pull origin develop --allow-unrelated-histories
+e scrivere :q sull'editor Vim.
+
+Potrebbe anche chiedere nel rilascio delle release
+di scrivere qualcosa nei file di testo.
+Scrivere eventualmente qualcosa, salvare (:w) e poi chiudere (:q);
+premere (CTRL+C) nel caso non facesse scrivere comandi come (:q)
+
+Nel caso si dimenticasse di inserire il ramo di feature,
+resettare il commit attraverso:
+git reset --hard develop
+e poi eseguire correttamente le push
+
+[Sviluppatore 2: Gabriel]
+git pull origin develop		
+git flow feature start thirdfeature									
+echo "2009088" >> schede_madri.md
+echo "2014028" >> schede_madri.md
+echo "- schede_madri.md" >> inventario.md
+git add schede_madri.md
+git add inventario.md
+git commit -m "close #3" -m "Aggiunto file schede_madri"  -m "Modificato file inventario"
+git flow feature publish thirdfeature
+git flow feature finish -k thirdfeature
+git push origin develop
+(Chiusura della terza issue su GitHub)
+
+[Sviluppatore 2: Gabriel]
+git flow release start -F Version_1.0
+sed -i "3i\Elettronica Padovana" inventario.md
+git add inventario.md
+git commit -m "Aggiunto nome \"Elettronica Padovana\""
+git flow release publish Version_1.0
+git push -f origin main 
+git flow release finish Version_1.0		//in questo modo il branch di release viene eliminato localmente; così si potrà fare la seconda release
+git push origin --tags		
+//Qui il tag si vede in pratica andando sul ramo develop e si vede (Release Version 1.0 o simile, come nel caso nostro) come tag.
+
+Nel caso pessimo si cancellassero dei file e li si volesse recuperare, dare un occhio a:
+https://www.git-tower.com/learn/git/faq/restoring-deleted-files
+
+[Sviluppatore 2: Gabriel]
+git pull origin main
+git flow feature start fourthfeature
+mkdir componenti
+mv processori.md /componenti
+mv schede_madri.md /componenti
+sed -i "4i\componenti" inventario.md
+cd ..
+git add componenti/
+git add inventario.md
+git commit -m "close #4" -m "Aggiunta cartella Componenti"  -m "Modificato file inventario"
+git flow feature publish fourthfeature
+git flow feature finish -k fourthfeature
+git push origin develop
+(Chiusura della quarta issue su GitHub)
+
+[Sviluppatore 1: Luca]
+git pull origin develop
+mkdir periferiche
+git flow feature start fifthfeature
+echo "periferiche" >>inventario.md
+cd periferiche
+echo "null" >> empty.txt 
+cd ..
+git add periferiche/
+git add inventario.md
+git commit -m "close #5" -m "Aggiunta cartella Periferiche"  -m "Aggiunto file temporaneo vuoto" -m "Modificato file inventario"
+git flow feature publish fifthfeature
+git flow feature finish -k fifthfeature
+git push origin develop
+(Chiusura della quinta issue su GitHub)
+
+[Sviluppatore 2: Gabriel]
+git pull origin develop
+cd periferiche
+git flow feature start sixthfeature
+echo "2009088" >> tastiere.md
+echo "2014028" >> tastiere.md
+cd ..
+echo "- tastiere.md" >> inventario.md
+git add tastiere.md
+git add inventario.md
+git commit -m "close #6" -m "Aggiunto file tastiere" -m "Modificato file inventario"
+git flow feature publish sixthfeature
+git flow feature finish -k sixthfeature
+git push origin develop		
+(Chiusura della sesta issue su GitHub)									
+
+[Sviluppatore 1: Luca]
+git pull origin develop
+cd periferiche
+git flow feature start seventhfeature
+echo "2009088" >> mouse.md
+echo "2014028" >> mouse.md
+cd ..
+echo "- mouse.md" >> inventario.md
+rm inventario.md
+git add mouse.md
+git add inventario.md
+git commit -m "close #7" -m "Aggiunto file mouse" -m "Modificato file inventario"
+git flow feature publish seventhfeature
+git flow feature finish -k seventhfeature
+git push origin develop
+(Chiusura della settima issue su GitHub)											
+
+[Sviluppatore 2: Gabriel]
+git pull origin develop
+//Importante: il ramo di release precedente deve essere chiuso (quindi feature publish e feature finish)
+//prima di avviare il comando successivo
+git flow release start -F Version_2.0
+git flow release publish Version_2.0
+git push origin --tags		
+//Importante: non fare il comando 'git flow release finish RELEASE'
