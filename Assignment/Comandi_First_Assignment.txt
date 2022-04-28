@@ -14,7 +14,8 @@ di GitHub nella sezione SSH Keys. Questo permette di fare "git add remote origin
 Se si sbagliasse a inserire la git remote: git remote remove origin
 
 ----Dubbi logici e domande frequenti----
--Il riferimento che il prof intende è di fare echo aggiungengo come riga dove si trova il file X (ad es. inventario)
+-La correzione è fatta in modo automatizzato; il prof guarda che file ci sono, non contenuto o altro. Basta seguire le cose con precisione e si va lisci
+-Il riferimento che il prof intende è di fare echo aggiungendo come riga dove si trova il file X (ad es. inventario)
  L'idea è quella di avere una sorta di index tipo sito web. Il contenuto dei file comunque non è rilevante.
 -In un punto richiede il commit di una cartella vuota, che non sarebbe possibile.
  Occorre creare un nuovo file (comando touch per crearne uno vuoto)
@@ -25,11 +26,11 @@ commit avanti al branch main/master. Infatti il resto dei comandi lo riflette.
 
 ----Assignment vero e proprio----
 
-[Sviluppatore 1 - Luca]
+[Sviluppatore 1]
 (Si crei una cartella generica in una posizione X e si faccia tutto da lì)
 
 git flow init
-git remote add origin https://github.com/LucaRomio/First-assignment.git	
+git remote add origin https://github.com/user/cartella.git	(sostituire user e cartella con nomi appropriati)
 
 (A questo punto si va su GitHub.com, andando a crearsi un New Project.
 Fatto questo, si aggiunga l'altro sviluppatore su Settings, Collaborators.
@@ -39,8 +40,8 @@ eventualmente assegnandole ad un Assignee, poi si creano le Milestone (prima/sec
 e successivamente si inseriscono nella colonna To Do della Project Board).
 
 git flow feature start firstfeature
-echo "2009088" >> inventario.md
-echo "2014028" >> inventario.md
+echo "matricola1" >> inventario.md
+echo "matricola2" >> inventario.md
 git add inventario.md
 git commit -m "close #1" -m "Aggiunto file inventario" 
 git flow feature publish firstfeature							
@@ -49,8 +50,8 @@ git push origin develop
 git push -f origin main
 
 git flow feature start secondfeature
-echo "2009088" >> processori.md
-echo "2014028" >> processori.md
+echo "matricola1" >> processori.md
+echo "matricola2" >> processori.md
 echo "- processori.md" >>inventario.md
 git add processori.md
 git add inventario.md
@@ -75,11 +76,11 @@ resettare il commit attraverso:
 git reset --hard develop
 e poi eseguire correttamente le push
 
-[Sviluppatore 2: Gabriel]
+[Sviluppatore 2]
 git pull origin develop		
 git flow feature start thirdfeature									
-echo "2009088" >> schede_madri.md
-echo "2014028" >> schede_madri.md
+echo "matricola1" >> schede_madri.md
+echo "matricola2" >> schede_madri.md
 echo "- schede_madri.md" >> inventario.md
 git add schede_madri.md
 git add inventario.md
@@ -89,7 +90,7 @@ git flow feature finish -k thirdfeature
 git push origin develop
 (Chiusura della terza issue su GitHub)
 
-[Sviluppatore 2: Gabriel]
+[Sviluppatore 2]
 git flow release start -F Version_1.0
 sed -i "3i\Elettronica Padovana" inventario.md
 git add inventario.md
@@ -103,7 +104,7 @@ git push origin --tags
 Nel caso pessimo si cancellassero dei file e li si volesse recuperare, dare un occhio a:
 https://www.git-tower.com/learn/git/faq/restoring-deleted-files
 
-[Sviluppatore 2: Gabriel]
+[Sviluppatore 2]
 git pull origin main
 git flow feature start fourthfeature
 mkdir componenti
@@ -119,7 +120,7 @@ git flow feature finish -k fourthfeature
 git push origin develop
 (Chiusura della quarta issue su GitHub)
 
-[Sviluppatore 1: Luca]
+[Sviluppatore 1]
 git pull origin develop
 mkdir periferiche
 git flow feature start fifthfeature
@@ -135,12 +136,12 @@ git flow feature finish -k fifthfeature
 git push origin develop
 (Chiusura della quinta issue su GitHub)
 
-[Sviluppatore 2: Gabriel]
+[Sviluppatore 2]
 git pull origin develop
 cd periferiche
 git flow feature start sixthfeature
-echo "2009088" >> tastiere.md
-echo "2014028" >> tastiere.md
+echo "matricola1" >> tastiere.md
+echo "matricola2" >> tastiere.md
 cd ..
 echo "- tastiere.md" >> inventario.md
 git add tastiere.md
@@ -151,12 +152,12 @@ git flow feature finish -k sixthfeature
 git push origin develop		
 (Chiusura della sesta issue su GitHub)									
 
-[Sviluppatore 1: Luca]
+[Sviluppatore 1]
 git pull origin develop
 cd periferiche
 git flow feature start seventhfeature
-echo "2009088" >> mouse.md
-echo "2014028" >> mouse.md
+echo "matricola1" >> mouse.md
+echo "matricola2" >> mouse.md
 cd ..
 echo "- mouse.md" >> inventario.md
 rm inventario.md
@@ -168,7 +169,7 @@ git flow feature finish -k seventhfeature
 git push origin develop
 (Chiusura della settima issue su GitHub)											
 
-[Sviluppatore 2: Gabriel]
+[Sviluppatore 2]
 git pull origin develop
 //Importante: il ramo di release precedente deve essere chiuso (quindi feature publish e feature finish)
 //prima di avviare il comando successivo
@@ -176,3 +177,15 @@ git flow release start -F Version_2.0
 git flow release publish Version_2.0
 git push origin --tags		
 //Importante: non fare il comando 'git flow release finish RELEASE'
+
+
+----Compilazione questionario----
+Nota: ne basta uno solo a compilarlo non è un problema se lo fanno tutti e due
+
+In pratica chiede nome/cognome/matricola dei due componenti del gruppo
+poi chiede l'url ssh della repo: (ad esempio p.es. git@github.com:nicolabertazzo/LAB2.git)
+Commit ID dell'ultimo commit (si vede entrando nella cronologia delle issues, cliccando la commit e poi cliccando tipo: a45yr78
+oppure entrare da git e fare git log, copiandosi una roba tipo: 521747298a3790fde1710f3aa2d03b55020575aa
+Tag Release1 (es. Version_1.0) e id delle issues (basta mettere tutto dopo il cancelletto, es. 1,2,3,4,5,6,7)
+
+----The End-----
