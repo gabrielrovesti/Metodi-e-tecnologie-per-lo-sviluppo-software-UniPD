@@ -1,3 +1,6 @@
+*Scritti da Gabriel: con questi comandi voto 29*
+*Si prenda come riferimento indicativo*
+
 ----Prerequisiti----
 Configurazioni base di Git (user/email)
 git config --global user.name "John Doe"
@@ -187,5 +190,12 @@ poi chiede l'url ssh della repo: (ad esempio p.es. git@github.com:nicolabertazzo
 Commit ID dell'ultimo commit (si vede entrando nella cronologia delle issues, cliccando la commit e poi cliccando tipo: a45yr78
 oppure entrare da git e fare git log, copiandosi una roba tipo: 521747298a3790fde1710f3aa2d03b55020575aa
 Tag Release1 (es. Version_1.0) e id delle issues (basta mettere tutto dopo il cancelletto, es. 1,2,3,4,5,6,7)
+
+
+---Errori vari che dice il prof abbassano il voto---
+-Attenzione a risolvere i conflitti prima di pushare
+-Assegnare tutte le issues
+-Chiudere la prima milestone
+-Scrivere bene le matricole quando si fa il push, il prof non perde tempo
 
 ----The End-----
