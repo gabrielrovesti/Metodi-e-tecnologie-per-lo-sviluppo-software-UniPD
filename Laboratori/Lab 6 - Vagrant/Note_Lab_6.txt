@@ -1,0 +1,38 @@
+Per eseguire questo laboratorio occorre:
+- Installare Vagrant (https://www.vagrantup.com/)
+- Installare Virtual Box (https://www.virtualbox.org/)
+- Installare successivamente a Vagrant il plugin vagrant-proxyconf
+  (http://tmatilai.github.io/vagrant-proxyconf/)
+- Installare la VM presente (almeno quest'anno)
+  a questo indirizzo:
+  https://drive.google.com/u/1/uc?id=1xULuQCXQKeWdIlVzubWvxPYg7wChL3R5&export=download
+
+A questo punto si scompatta la zip (1,4 GB) su una cartella preferita.
+Nella cartella "vm-maxmara" troviamo:
+- il file della macchina virtuale
+- un readme che riporto 
+- un file Vagrant
+
+Contenuto del readme:
+
+Per avviare la macchina per le esercitazioni:
+- Scompattare il file
+- Aprire una powershell o una shell e posizionarsi nella cartella creata
+- Eseguire il comando vagrant up
+
+Per verificare che i servizi siano attivi
+- Aprire con un browser la pagina http://localhost:10000
+(Appare - Welcome to your Jenkins Lab Demo Machine)
+- Navigare i link presenti nella pagina (in particolare Workshop che è la solita guida)
+
+Se la verifica non va a buon fine eseguire i seguenti comandi:
+- Aprire una powershell o una shell e posizionarsi nella cartella creata precedentemente
+- Eseguire il comando vagrant ssh
+- Verrà aperta una shell nella macchina virtuale
+- Eseguire i comandi:
+- export EXTERNAL_PORT=10000
+- docker-compose up -d --build --force-recreate
+- docker-compose ps
+- Attendere fino a che tutti i servizi siano nello stato Up "(healthy)"
+- uscire dalla shell con il comando exit
+- effettuare nuovamente la verifica
