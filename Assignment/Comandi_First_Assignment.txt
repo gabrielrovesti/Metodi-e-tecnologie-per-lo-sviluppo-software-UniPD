@@ -1,5 +1,14 @@
 *Scritti da Gabriel: con questi comandi voto 29*
-*Si prenda come riferimento indicativo*
+*Si prenda come riferimento indicativo - Io ho preso 29 perché non ho chiuso la prima milestone, quindi attenzione a chiuderla*
+
+---Errori vari che dice per il prof abbassano il voto---
+- Attenzione a risolvere i conflitti prima di pushare (ha decretato il fallimento di un assignment)
+- Assegnare tutte le issues tra sviluppatore 1/2 (ci sta scritto sviluppatore 1/2 a fianco delle issue, ma per diversi è stato un problema)
+- Chiudere la prima milestone (la seconda va tenuta aperta)
+- Scrivere bene le matricole quando si fa il push, il prof non perde tempo
+- Chiamare le cartelle esattamente come scritto; infatti c'è stata polemica
+tra nomi delle cartelle con la lettera maiuscola.
+---Quindi scrivere i nomi tali e quali a come li scrive lui---
 
 ----Prerequisiti----
 Configurazioni base di Git (user/email)
@@ -181,21 +190,13 @@ git flow release publish Version_2.0
 git push origin --tags		
 //Importante: non fare il comando 'git flow release finish RELEASE'
 
-
 ----Compilazione questionario----
-Nota: ne basta uno solo a compilarlo non è un problema se lo fanno tutti e due
+Nota: ne basta uno solo a compilarlo; comunque non è un problema se lo fanno tutti e due
 
 In pratica chiede nome/cognome/matricola dei due componenti del gruppo
 poi chiede l'url ssh della repo: (ad esempio p.es. git@github.com:nicolabertazzo/LAB2.git)
 Commit ID dell'ultimo commit (si vede entrando nella cronologia delle issues, cliccando la commit e poi cliccando tipo: a45yr78
 oppure entrare da git e fare git log, copiandosi una roba tipo: 521747298a3790fde1710f3aa2d03b55020575aa
 Tag Release1 (es. Version_1.0) e id delle issues (basta mettere tutto dopo il cancelletto, es. 1,2,3,4,5,6,7)
-
-
----Errori vari che dice il prof abbassano il voto---
--Attenzione a risolvere i conflitti prima di pushare
--Assegnare tutte le issues
--Chiudere la prima milestone
--Scrivere bene le matricole quando si fa il push, il prof non perde tempo
 
 ----The End-----
