@@ -1,0 +1,829 @@
+Creazione del progetto con Maven (maven-archetype-quickstart)
+Nel progetto di quest'anno i parametri erano:
+groupId: it.unipd.mtss
+artifactId: e-shop-manager
+L'idea di esecuzione è come sotto (su Windows eseguire da cmd e funziona)
+mvn archetype:generate -DgroupId=it.unipd.mtss -DartifactId=e-shop-manager -DarchetypeArtifactId=maven-archetype-quickstart -DinteractiveMode=false
+
+In ogni file Java (non dentro ai test) ci sta il formato:
+////////////////////////////////////////////////////////////////////
+// [NOME1] [COGNOME1] [MATRICOLA1]
+// [NOME2] [COGNOME2] [MATRICOLA2]
+////////////////////////////////////////////////////////////////////
+
+Quando si genera l'artefatto, va configurato il file pom.xml.
+All'interno di questo vanno configurate JUnit (versione 4 o 5),
+i plugin vari e le formattazioni utilizzate,
+le dipendenze e CheckStyle/Jacoco/Coveralls.
+
+----POM.XML E CHECKSTYLE----
+
+La compilazione di Java parte con la 8 (JDK 1.8)
+con la 11 (come nell'esempio), Java 17/18
+
+Esempio di configurazione nel file pom:
+<properties>
+		<maven.compiler.source>11</maven.compiler.source>
+		<maven.compiler.target>11</maven.compiler.target>
+	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+</properties>
+
+Un esempio di configurazione pom completo:
+(JUnit 5, CheckStyle, varie per fare andare tutto)
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+  	<groupId>it.unipd.mtss</groupId>
+  	<artifactId>e-shop-manager</artifactId>
+  	<packaging>jar</packaging>
+  	<version>1.0-SNAPSHOT</version>
+  	<name>e-shop-manager</name>
+  	<url>http://maven.apache.org</url>
+  
+  	<properties>
+     		<maven.compiler.source>11</maven.compiler.source>
+     		<maven.compiler.target>11</maven.compiler.target>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+  	</properties>
+  
+  	<dependencies>
+   		<dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>5.8.2</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>5.8.2</version>
+            <scope>test</scope>
+    </dependency>
+  	</dependencies>
+
+	<build>
+		<pluginManagement>
+		<plugins>
+			<plugin>
+				<artifactId>maven-clean-plugin</artifactId>
+				<version>3.1.0</version>
+			</plugin>
+
+			<plugin>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>3.0.2</version>
+			</plugin>
+
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.8.0</version>
+			</plugin>
+
+			<plugin>
+                		<artifactId>maven-surefire-plugin</artifactId>
+                		<version>2.22.2</version>
+           		</plugin>
+
+			<plugin>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>3.0.2</version>
+			</plugin>
+
+			<plugin>
+				<artifactId>maven-install-plugin</artifactId>
+				<version>2.5.2</version>
+			</plugin>
+
+			<plugin>
+				<artifactId>maven-deploy-plugin</artifactId>
+				<version>2.8.2</version>
+			</plugin>
+
+			<plugin>
+				<artifactId>maven-site-plugin</artifactId>
+				<version>3.7.1</version>
+			</plugin>
+
+			<plugin>
+				<artifactId>maven-project-info-reports-plugin</artifactId>
+				<version>3.0.0</version>
+			</plugin>
+
+            		<plugin>
+                		<artifactId>maven-failsafe-plugin</artifactId>
+                		<version>2.22.2</version>
+            		</plugin>
+		</plugins>
+		</pluginManagement>
+
+		<plugins>
+			<plugin>
+	       		<groupId>org.apache.maven.plugins</groupId>
+	       		<artifactId>maven-checkstyle-plugin</artifactId>
+				<version>3.1.2</version>
+	       		<configuration>
+	         		<configLocation>checkstyle.xml</configLocation>
+	         		<consoleOutput>true</consoleOutput>
+	         		<failsOnError>true</failsOnError>
+	    		</configuration>
+	    	   	<executions>
+	         		<execution>
+	           			<phase>package</phase>
+	           			<goals>
+	             			<goal>checkstyle</goal>
+	           			</goals>
+	         		</execution>
+	       		</executions>
+	     		</plugin>
+	    		<!--Needs Jacoco 0.8.8 to run Junit 5-->
+	    		<plugin>
+     			<groupId>org.jacoco</groupId>
+     			<artifactId>jacoco-maven-plugin</artifactId>
+     			<version>0.8.8</version>
+     			<executions>
+     				<execution>
+					<id>prepare-agent</id>
+            				<goals>
+                				<goal>prepare-agent</goal>
+           				</goals>
+        			</execution>
+        			<execution>
+        				<id>report</id>
+            				<goals>
+                				<goal>report</goal>
+            				</goals>
+        			</execution>
+     			</executions>
+        		</plugin>
+        			
+        		<plugin>
+		   		<groupId>org.eluder.coveralls</groupId>
+		   		<artifactId>coveralls-maven-plugin</artifactId>
+		   		<version>4.3.0</version>
+				<dependencies>
+         				 <dependency>
+            					<groupId>javax.xml.bind</groupId>
+            					<artifactId>jaxb-api</artifactId>
+            					<version>2.3.1</version>
+          				</dependency>
+        			</dependencies>
+			</plugin>
+		
+	  	</plugins>
+   	</build>
+</project>
+
+Il file CheckStyle va configurato secondo i criteri detti dal prof,
+solo con quelli la build deve fallire.
+Non importa il resto della formattazione (modificarla a mano è una follia, believe me).
+Un esempio di file sarebbe:
+<?xml version="1.0"?>
+<!DOCTYPE module PUBLIC
+          "-//Checkstyle//DTD Checkstyle Configuration 1.3//EN"
+          "https://checkstyle.org/dtds/configuration_1_3.dtd">
+
+<module name = "Checker">
+	<module name="TreeWalker">
+		<module name="BooleanExpressionComplexity">
+			<property name="max" value="10"/>
+		</module>
+		<module name="CyclomaticComplexity">
+  			<property name="max" value="20"/>
+		</module>
+		<module name="MethodLength">
+  			<property name="tokens" value="METHOD_DEF"/>
+  			<property name="max" value="60"/>
+  			<property name="countEmpty" value="false"/>
+		</module>
+		<module name="EmptyCatchBlock">
+ 			<property name="exceptionVariableName" value="expected|ignore"/>
+		</module>
+		<module name="AvoidStarImport">
+  			<property name="excludes" value="java.io,java.net,java.lang.Math"/>
+		</module>
+		<module name="IllegalImport">
+  			<property name="illegalPkgs" value="java.io, java.sql"/>
+		</module>
+		<module name="NeedBraces">
+  			<property name="allowSingleLineStatement" value="true"/>
+		</module>
+	</module>
+
+	<module name="LineLength">
+		<property name="max" value="150"/>
+  	</module>
+
+	<module name="FileLength">
+  		<property name="max" value="2000"/>
+	</module>
+
+	<module name="FileTabCharacter">
+  		<property name="eachLine" value="true"/>
+	</module>
+
+	<module name="Header">
+		<property name="header" value="////////////////////////////////////////////////////////////////////\n// [Nome1] [Cognome1] [Matricola1]\n// [Nome2] [Cognome2] [Matricola2]\n////////////////////////////////////////////////////////////////////"/>
+	</module>
+</module>
+
+----PROGETTO E CODICE----
+Viene creata la classe App,
+che contiene un metodo main e un metodo di test.
+Questa classe potrà essere cancellata, irrilevante
+allo scopo del progetto.
+Il prof dà un'interfaccia, da cui si capisce
+come implementare il resto dei requisiti.
+
+-Esempio 21/22.
+Data l'interfaccia:
+
+package it.unipd.mtss.business;
+import java.util.List;
+import it.unipd.mtss.business.exception.BillException;
+import it.unipd.mtss.model.MenuItem;
+public interface Bill {
+  double getOrderPrice(List<EItem> itemsOrdered, User user) throws
+RestaurantBillException;
+}
+
+Dovevano essere implementate una classe EITem e una classe User,
+assieme ad una eccezione user defined.
+In particolare, sarà anche necessaria una classe con requisiti:
+----
+1. Dato un elenco di articoli (Processori, Schede Madri, Tastiere, Mouse) calcolare il totale;
+2. Se vengono ordinati più di 5 Processori viene fatto uno sconto del 50% sul prezzo del Processori
+meno caro;
+3. Se vengono ordinati più di 10 Mouse il meno caro viene regalato;
+4. Se vengono ordinati lo stesso numero di Mouse e Tastiere viene regalato l’articolo meno caro.
+5. Se l’importo totale degli articoli supera i 1000 euro viene fatto uno sconto del 10% sul totale;
+6. Non è possibile avere un’ordinazione con più di 30 elementi (se accade prevedere un messaggio
+d’errore);
+7. Se l’importo totale è inferiore a 10 € viene aggiunta una commissione di 2 €;
+8. Prevedere la possibilità di regalare, in modo casuale, 10 ordini effettuati dalle 18:00 alle 19:00
+da utenti minorenni differenti.
+----
+
+Si ritiene quindi di avere una classe Bill con l'interfaccia,
+una classe che concretizzi questa interfaccia (con i requisiti sopra richiesti ed appositi test),
+una classe apposita per gli utenti in sconto (con tutte le casistiche possibili)
+
+Per eseguire il build lifecycle:
+
+Su VS Code:
+Installare le estesioni Java Runner, Java Debugger,
+JUnit, Maven, ecc.
+Poi semplicemente appare un sottomenù Maven,
+da cui si schiaccia "package" solitamente,
+per poter fare un esecuzione completa.
+
+Su Eclipse:
+Tasto destro sulla cartella del progetto,
+cliccare Maven, Build... e poi mettere nel goal "clean package"
+e schiacciare su "Run"
+
+----TEST----
+Esse vengono create semplicemente facendo
+(caso Eclipse) tasto destro su una classe
+e cliccando "Create JUnit Test" e si configura da sola
+con i parametri utili.
+
+I casi da testare devono coprire tutti i metodi:
+per esempio, se ho un costruttore con delle variabili,
+ho dei metodi di get e ho delle assegnazioni,
+i metodi di test devono essere in grado di coprireù
+un certo risultato atteso (assertEquals),
+un risultato atteso rispetto ad una lista (assertAll)
+con l'uso delle annotazioni @Test, @Before per i test su costruttori, ecc.
+
+Esempio di classe sconto Giveaway:
+package it.unipd.mtss;
+
+import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.lang.Math;
+import java.lang.NullPointerException;
+
+public class Giveaway {
+    static public LocalTime GIVEAWAYSTART = LocalTime.of(18, 0);
+    static public LocalTime GIVEAWAYFINISH = LocalTime.of(19, 0);
+    static public int NUMBEROFWINNERS = 10;
+    private List<Order> candidateOrders = new ArrayList<Order>(0);
+    //PRE: Lista di ordini, può essere vuota;
+    public Giveaway(List<Order> _inputOrdersList) throws NullPointerException{
+        boolean alreadyPresent=false;
+        if(_inputOrdersList!=null){
+            for(int j=0; j<_inputOrdersList.size(); j++){
+                alreadyPresent=false;
+                if(_inputOrdersList.get(j).getUser().isUnderage()) {                                                     //minorenne?
+                    if(_inputOrdersList.get(j).getTime().isAfter(GIVEAWAYSTART)&&
+                       _inputOrdersList.get(j).getTime().isBefore(GIVEAWAYFINISH)){ //tra le 18 e le 19 ?
+                        if(!candidateOrders.isEmpty()){
+                            for (int i=0; i<candidateOrders.size(); i++) {                                          //L'user è già presente?
+                                if(candidateOrders.get(i).getUser().equals(_inputOrdersList.get(j).getUser())){
+                                    alreadyPresent=true;
+                                }
+                            }
+                        }
+                        if(!alreadyPresent){
+                            candidateOrders.add(_inputOrdersList.get(j));
+                        }
+                    }
+                }
+            }
+        }else{
+            throw new NullPointerException("The list of order could not be found");
+        }
+    }
+    //POST: Lista di ordini fatta nell'arco temporale richiesto e da utenti minorenni distinti
+
+    public boolean giveawaySelection(){
+        if(!candidateOrders.isEmpty()){
+            List<Order> winners= new ArrayList<Order>(0);
+            Order selection;
+            if(candidateOrders.size()<=NUMBEROFWINNERS){
+                winners=candidateOrders;
+            }else{
+                for(int i=0; i<NUMBEROFWINNERS; i++){
+                    selection = candidateOrders.get(((int)Math.random())%candidateOrders.size());
+                    winners.add(selection);
+                    candidateOrders.remove(selection);
+                }
+            
+            } 
+            System.out.println("I vincitori sono: ");
+            for(int i=0; i<winners.size(); i++){
+                System.out.println( winners.get(i).getUser().getId()+"\t\t"
+                                    +winners.get(i).getUser().getName()+"\t\t"
+                                    +winners.get(i).getUser().getSurname()
+                                    );
+            }
+            return true;
+        }
+        return false;
+    }
+
+    public List<Order> getCandidateOrders(){
+        return candidateOrders;
+    }
+}
+
+La classe di Test (con JUnit 5), controlla tutti i valori sulle liste:
+package it.unipd.mtss;
+
+import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.time.LocalDate;
+
+
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import it.unipd.mtss.exception.BillException;
+
+public class GiveawayTest{
+	List<Order> templateList = new ArrayList<Order>(0), dummyList = new ArrayList<Order>(0), coolList = new ArrayList<Order>(0), shorter_coolList = new ArrayList<Order>(0);
+	Giveaway giv;
+	@BeforeEach
+	public void initialize() throws BillException{
+		List<EItem> NoExtra_List = List.of(												
+			new EItem(EItem.itemType.Processor, "Beta", 1.0),					
+			new EItem(EItem.itemType.Processor, "Gamma", 4.0),					
+			new EItem(EItem.itemType.Mouse, "Orange", 2.0),						
+			new EItem(EItem.itemType.Mouse, "Banana", 5.0),
+			new EItem(EItem.itemType.Keyboard, "Albatross", 3.0),				
+			new EItem(EItem.itemType.Keyboard, "Bird", 6.0),
+			new EItem(EItem.itemType.Keyboard, "Koala", 7.0),
+			new EItem(EItem.itemType.Motherboard, "ASUS_ROG", 30.0),				
+			new EItem(EItem.itemType.Motherboard, "Kimberlite_Elec", 60.0)
+		);
+		List<User> userList = List.of(
+			new User("0000000", "Alfa", "Zero", LocalDate.of(1999, 12, 30)),		//Maggiorenne
+			new User("0000001", "Primo", "Levi", LocalDate.of(2010, 12,5)),		//Minorenne1
+			new User("0000002", "Eta", "Beta", LocalDate.of(2020, 5, 4)),		//Minorenne2
+			new User("0000003", "Joe", "White", LocalDate.of(2012, 12, 12)),		//Minorenne3
+			new User("1000000", "Matusa", "Lemme", LocalDate.of(1908, 1, 3)),	//Maggiorenne
+			new User("0000004", "Bob", "Marley", LocalDate.of(2014, 4, 4)),		//Minorenne4
+			new User("0000005", "Jim", "Marley", LocalDate.of(2017, 4, 4)),		//Minorenne5
+			new User("0000006", "Steven", "Marley", LocalDate.of(2016, 4, 4)),	//Minorenne6
+			new User("0000007", "Steven", "Seagull", LocalDate.of(2018, 4, 4)),	//Minorenne7
+			new User("0000008", "Al", "Pine", LocalDate.of(2010, 4, 4)),			//Minorenne8
+			new User("0000009", "Rick", "Shaw", LocalDate.of(2010, 4, 4)),		//Minorenne9
+			new User("0000010", "Richard", "Tudor", LocalDate.of(2010, 4, 4)),	//Minorenne10
+			new User("0000011", "Alfredo", "Biachi", LocalDate.of(2010, 4, 4)),	//Minorenne11
+			new User("0000012", "Himuro", "Rei", LocalDate.of(2010, 4, 4)),		//Minorenne12
+			new User("0000013", "Luke", "Skywalker", LocalDate.of(2010, 4, 4)),	//Minorenne13
+			new User("0000014", "Leia", "Organa", LocalDate.of(2010, 4, 4)),		//Minorenne14
+			new User("0000015", "Bob", "Dylan", LocalDate.of(2010, 4, 4))		//Minorenne15
+		);
+		templateList = List.of(
+			new Order(NoExtra_List, userList.get(0), LocalTime.of(18,30,0)),		//M O	NO
+			new Order(NoExtra_List, userList.get(1), LocalTime.of(18,30,0)),		//m O	OK
+			new Order(NoExtra_List, userList.get(2), LocalTime.of(18,30,0)),		//m O	OK	
+			new Order(NoExtra_List, userList.get(3), LocalTime.of(20,30,0)),		//m X	NO	
+			new Order(NoExtra_List, userList.get(4), LocalTime.of(19,30,0)),		//M X	NO	
+			new Order(NoExtra_List, userList.get(5), LocalTime.of(18,30,0)),		//m O	OK
+			new Order(NoExtra_List, userList.get(6), LocalTime.of(18,30,0)),		//m O	OK
+			new Order(NoExtra_List, userList.get(7), LocalTime.of(18,30,0)),		//m O	OK
+			new Order(NoExtra_List, userList.get(8), LocalTime.of(18,30,0)),		//m O	OK
+			new Order(NoExtra_List, userList.get(9), LocalTime.of(18,30,0)),		//m O	OK
+			new Order(NoExtra_List, userList.get(10), LocalTime.of(18,30,0)),		//m O	OK
+			new Order(NoExtra_List, userList.get(11), LocalTime.of(18,30,0)),		//m O	OK
+			new Order(NoExtra_List, userList.get(2), LocalTime.of(18,45,0)),		//m O D NO
+			new Order(NoExtra_List, userList.get(12), LocalTime.of(18,30,0)),		//m O	OK
+			new Order(NoExtra_List, userList.get(13), LocalTime.of(18,30,0)),		//m O	OK
+			new Order(NoExtra_List, userList.get(14), LocalTime.of(18,30,0))		//m O	OK
+		);
+		dummyList=List.copyOf(templateList);
+		coolList = List.of(
+			templateList.get(1),
+			templateList.get(2),
+			templateList.get(5),
+			templateList.get(6),
+			templateList.get(7),
+			templateList.get(8),
+			templateList.get(9),
+			templateList.get(10),
+			templateList.get(11),
+			templateList.get(13),
+			templateList.get(14),
+			templateList.get(15)
+		);
+
+        shorter_coolList = List.of(
+            templateList.get(1),
+			templateList.get(2),
+			templateList.get(5),
+			templateList.get(6)
+        );
+
+        
+
+	}
+
+	//TEST COSTRUTTORE
+	//Test su argomenti nulli
+	@Test
+	public void testOnCreationSetNullList(){
+		try{
+			new Giveaway(null);
+		}
+		catch(NullPointerException e){
+			Assertions.assertEquals("The list of order could not be found", e.getMessage());
+		}
+	}
+
+	//Test sulla corretta selezione dei partecipanti
+	@Test
+	public void testCorrectInitialCandidateParsing(){
+		giv = new Giveaway(dummyList);
+
+		
+		Assertions.assertAll(
+			()->{
+				Assertions.assertTrue(giv.getCandidateOrders().size()==coolList.size()); 
+			},
+			()->{
+				
+					boolean equivalent=true;	
+					for(int i=0; i<giv.getCandidateOrders().size() && equivalent; i++){
+						equivalent=giv.getCandidateOrders().get(i).equals(coolList.get(i));
+					}
+					Assertions.assertTrue(equivalent);
+				}
+				
+			
+		);
+		
+	}
+
+	
+
+	//Testa se, data una lista di candidati correttamente selezionati, qualcuno vince
+	@Test
+	public void testGiveawaySelection(){
+        Assertions.assertAll(
+            ()->Assertions.assertTrue(new Giveaway(coolList).giveawaySelection()),                                  //Lista 10+ candidati
+            ()->Assertions.assertFalse(new Giveaway(new ArrayList<Order>(0)).giveawaySelection()),  //Lista vuota
+            ()->Assertions.assertTrue(new Giveaway(shorter_coolList).giveawaySelection())                           //Lista <10 candidati ->> "Tutti vincono"
+        );	
+	}
+
+}
+
+Altro esempio su User (IllegalArgumentException è per valori scorretti, catchati dall'altra parte):
+
+package it.unipd.mtss;
+
+import java.time.LocalDate;
+import java.lang.IllegalArgumentException;
+import java.lang.NullPointerException;
+
+public class User {
+    private String id, name, surname;
+    private LocalDate birthDate;
+
+    public User(String _id, String _name, String _surname, LocalDate _birthDate) throws IllegalArgumentException, NullPointerException{
+        if(_id!=null){
+            if(!_id.isEmpty()){
+                id=_id;
+            }else{
+                throw new IllegalArgumentException("Invalid id");
+            }
+        }else{
+            throw new NullPointerException("Invalid id reference (null)");
+        }
+
+        if(_name!=null){
+            if(!(_name.length()<2 || _name.length()>20)){
+                name=_name;
+            }else{
+                throw new IllegalArgumentException("Invalid name length");
+            }
+        }else{
+            throw new NullPointerException("Invalid name reference (null)");
+        }
+
+        if(_surname!=null){
+            if(!(_surname.length()<2 || _surname.length()>20)){
+                surname=_surname;
+            }else{
+                throw new IllegalArgumentException("Invalid surname length");
+            }
+        }else{
+            throw new NullPointerException("Invalid surname reference (null)");
+        }
+
+        try{
+            if(!_birthDate.equals(null)){
+                birthDate=_birthDate;
+            }
+        }catch(NullPointerException e){
+            throw new NullPointerException("Invalid birthDate reference (null)");
+        }
+    }
+
+    public String getId(){
+        return id;
+    };
+
+    public String getName(){
+        return name;
+    };
+
+    public String getSurname(){
+        return surname;
+    };
+
+    public int getAge(){
+        return LocalDate.now().getYear()-this.birthDate.getYear();
+    };
+    
+    public boolean isUnderage(){
+        return this.getAge()<18;
+    }
+
+}
+
+Con relativa classe di test (con JUnit 5):
+package it.unipd.mtss;
+
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import java.time.LocalDate;
+
+
+public class UserTest {
+	public User user1, user2, usr;
+	@BeforeEach
+	public void initialize() {
+		user1 = new User("2014028", "Utente1", "Utente1_c", LocalDate.of(1999, 1, 1));
+		user2 = new User("2009088", "Utente2", "Utente2_c", LocalDate.of(2005, 11, 2));
+	}
+
+	//TEST COSTRUTTORE
+	//Test su argomenti nulli
+	@Test
+	public void testOnCreationSetNullId() {
+	 	try {
+	 		usr = new User(null, "Utente1", "Utente1_c", LocalDate.of(1999, 1, 1));
+	 	}
+	 	catch(NullPointerException e) {
+	 		Assertions.assertEquals("Invalid id reference (null)", e.getMessage());
+	 	}
+ 	}
+    @Test
+    public void testOnCreationSetNullName() {
+	 	try {
+	 		usr = new User("2014028", null, "Utente1_c", LocalDate.of(1999, 1, 1));
+	 	}
+	 	catch(NullPointerException e) {
+	 		Assertions.assertEquals("Invalid name reference (null)", e.getMessage());
+	 	}
+ 	}
+    @Test
+    public void testOnCreationSetNullSurname() {
+	 	try {
+	 		usr = new User("2014028", "Utente1", null, LocalDate.of(1999, 1, 1));
+	 	}
+	 	catch(NullPointerException e) {
+			Assertions.assertEquals("Invalid surname reference (null)", e.getMessage());
+	 	}
+ 	}
+    @Test
+    public void testOnCreationSetNullDate() {
+	 	try {
+ 			usr = new User("2014028", "Utente1", "Utente1_c", null);
+ 		}
+ 		catch(NullPointerException e) {
+			Assertions.assertEquals("Invalid birthDate reference (null)", e.getMessage());
+	 	}
+ 	}
+	
+	//Test su argomenti non nei parametri specificati
+	@Test
+	public void testOnCreationSetInvalidid(){
+		try{
+			usr = new User("", "Utente1", "Utente1_c", LocalDate.of(1999, 1, 1));
+		}
+		catch(IllegalArgumentException e){
+			Assertions.assertEquals("Invalid id",e.getMessage());
+		}
+	}
+	@Test
+	public void testOnCreationSetInvalidName(){
+		Assertions.assertAll(
+			()->{
+				try{
+					usr = new User("2014028", "A", "Utente1_c", LocalDate.of(1999, 1, 1));
+				}
+				catch(IllegalArgumentException e){
+					Assertions.assertEquals("Invalid name length", e.getMessage());
+				}
+			},
+			()->{
+				try{
+					usr = new User("2014028", "ApparentlyYouCantPutAVeryHugeNameIntoThisField", "Romio", LocalDate.of(1999, 1, 1));
+				}
+				catch(IllegalArgumentException e){
+					Assertions.assertEquals("Invalid name length", e.getMessage());
+				}
+			}
+		);
+	}
+	@Test
+	public void testOnCreationSetInvalidSurname(){
+		Assertions.assertAll(
+			()->{
+				try{
+					usr = new User("2014028", "Utente1", "B", LocalDate.of(1999, 1, 1));
+				}
+				catch(IllegalArgumentException e){
+					Assertions.assertEquals("Invalid surname length", e.getMessage());
+				}
+			},
+			()->{
+				try{
+					usr = new User("2014028", "Utente1", "ApparentlyYouCantPutAVeryHugeSurnameIntoThisField", LocalDate.of(1999, 1, 1));
+				}
+				catch(IllegalArgumentException e){
+					Assertions.assertEquals("Invalid surname length", e.getMessage());
+				}
+			}
+		);
+
+	}
+
+
+	//TEST METODI DI GET
+	@Test
+	public void testGetName() {
+		//user2 = new User("2009088", "Utente2", "Utente2_c", LocalDate.of(2005, 11, 2));
+	    Assertions.assertEquals("Utente2", user2.getName());
+	}
+	@Test
+	public void testGetSurname() {
+		//user2 = new User("2009088", "Utente2", "Utente2_c", LocalDate.of(2005, 11, 2));
+	    Assertions.assertEquals("Rovesti", user2.getSurname());
+	}
+	@Test
+	public void testGetId() {
+		//user2 = new User("2009088", "Utente2", "Utente2_c", LocalDate.of(2005, 11, 2));
+	    Assertions.assertEquals("2009088", user2.getId());
+	}
+	@Test
+	public void testGetAge() {
+		//user2 = new User("2009088", "Utente2", "Utente2_c", LocalDate.of(2005, 11, 2));
+	    Assertions.assertEquals(LocalDate.now().getYear() - LocalDate.of(2005, 11, 2).getYear(), user2.getAge());
+	}
+
+
+	//TEST METODI BOOLEANI
+	@Test
+    public void testisUnderage() {
+		//user1 = new User("2014028", "Utente1", "Utente1_c", LocalDate.of(1999, 1, 1));
+		//user2 = new User("2009088", "Utente2", "Utente2_c", LocalDate.of(2005, 11, 2));
+		Assertions.assertAll(
+			()->Assertions.assertEquals(false, user1.isUnderage()),
+			()->Assertions.assertEquals(true, user2.isUnderage())
+		);
+    }
+}
+
+---GITHUB---
+
+Qui si decide che issues assegnare (generalmente la gente fa i metodi richiesti sopra dal prof,
+, ma non pone vincoli, io ho posto le varie classi + i test per un totale di 6 issues)
+L'importante è:
+-creare la Project Board
+-creare le issues ed assegnarle
+-creare la prima Milestone 
+-chiudere le issues
+-chiudere la Milestone
+
+Si può fare con i feature branch
+che nel caso di Github.com sono attivate
+facendo ad esempio il push di User, 
+facendo Create Pull Request e selezionando un branch
+fatto apposta (es. feature 1),
+dopodichè indicare milestone, assegnatario issue
+e scrivendo close, con "Merge Pull Request" o bottone verde.
+
+Da lì si attiva a lato su Development la chiusura della issue
+e viene correttamente chiusa facendo il merge con il main.
+
+Per evitare in giro di dare dati si deve andare sulla propria repo,
+cliccare su Settings e poi cliccare su Secrets.
+A quel punto, si schiaccia su Actions e su Add repository secret.
+
+Prima di fare ciò si va su Coveralls.io, si accede con GitHub e si recupera il token
+presente nella sezione Your Repositories una volta che si è fatto almeno un upload.
+e va aggiunto dentro GitHub (in Secrets come scritto) come COVERALLS_TOKEN.
+
+Come si vede è quello chiesto sotto.
+Deve essere creato con GitHub action il file maven.yml
+
+Un esempio è:
+name: Java CI with Maven
+
+on:
+  push:
+    branches:  
+      - main 
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up JDK 11
+      uses: actions/setup-java@v3
+      with:
+        java-version: '11'
+        distribution: 'temurin'
+        java-package: jdk
+        cache: maven
+        
+    - name: Build with Maven
+      run: mvn -B clean package jacoco:report
+            
+    - name: Coveralls
+      run: mvn -B coveralls:report --define repoToken=${{ secrets.COVERALLS_TOKEN }}
+      
+Questo fa la build ogni volta che si carica qualcosa.
+
+Assegnate le issue e deciso come implementare le feature,
+semplicemente si carica il codice pronto.
+Di volta in volta Maven esegue le build e, per caricare
+il badge di Maven e di Coveralls, si scrive questo nel readme
+
+# Second-Assignment
+
+# CODE COVERAGE using Jacoco and Coveralls
+[![Coverage Status](https://coveralls.io/repos/github/[user]/[repo]/badge.svg?branch=main)](https://coveralls.io/github/[user]/[repo]?branch=main)
+
+# LATEST BUILD STATUS
+[![Java CI with Maven](https://github.com/[user]/[repo]/actions/workflows/maven.yml/badge.svg?branch=main)](https://github.com/[user]/[repo]/actions/workflows/maven.yml)
+
+Fatti tutti i test, il coverage sarà soddisfacente se >= 85%.
+Coveralls.io segnala i casi di poco coverage e 
+si deve coprire tutto con i test e il progetto è completato.
+(i feature branch sono un'alternativa, qui segnata agendo da Github.com piuttosto
+che da linea di comando, i cui comandi possono essere visti da Comandi_First_Assignment)
+Non esiste un vero e proprio approccio;
+si hanno delle funzionalità e si creano i test.
+Si guardino i vari assignment2 presenti su GitHub per capirlo.
+Esempi ottimi sono già forniti qui sopra.
+
+---ERRORI COMUNI---
+
+Ci devono essere almeno 8 issues
+Versionare la cartella Target; va fatto solo su "src" (come ovvio che sia)
