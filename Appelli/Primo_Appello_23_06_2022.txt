@@ -1,0 +1,20 @@
+Domande aperte:
+Ruoli dello Scrum
+Cos'è il CM e quali sono i Modern CM Tools
+Analisi statica ed esempi
+Definizione di VCS e differenze tra CVCS e DVS
+
+Domande a crocette:
+Significato acronimo CRISP --> 
+Completo Ripetibile ecc.
+
+Strumento di Automated Code Review per qualità codice --> 
+Sonarqube
+
+Quali delle seguenti affermazione rispetto alla CD non è vera --> 
+Il processo di build per la produzione dei file binari deve essere eseguito più volte
+
+Caratteristiche ITS --> 
+- Avere istantanea attività da fare
+- Condivisione informazioni con team sviluppo, Project Manager, cliente
+- Gestire la priorità delle attività di un progetto software
